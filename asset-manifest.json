@@ -1,0 +1,16 @@
+{
+  "files": {
+    "main.css": "/jamshed-adil/adil-portfolio/static/css/main.357e0d5d.css",
+    "main.js": "/jamshed-adil/adil-portfolio/static/js/main.f89cca0e.js",
+    "static/js/453.1407b060.chunk.js": "/jamshed-adil/adil-portfolio/static/js/453.1407b060.chunk.js",
+    "static/media/logo.svg": "/jamshed-adil/adil-portfolio/static/media/logo.6ce24c58023cc2f8fd88fe9d219db6c6.svg",
+    "index.html": "/jamshed-adil/adil-portfolio/index.html",
+    "main.357e0d5d.css.map": "/jamshed-adil/adil-portfolio/static/css/main.357e0d5d.css.map",
+    "main.f89cca0e.js.map": "/jamshed-adil/adil-portfolio/static/js/main.f89cca0e.js.map",
+    "453.1407b060.chunk.js.map": "/jamshed-adil/adil-portfolio/static/js/453.1407b060.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.357e0d5d.css",
+    "static/js/main.f89cca0e.js"
+  ]
+}
