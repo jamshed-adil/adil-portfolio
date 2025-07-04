@@ -241,7 +241,7 @@ const Portfolio = () => {
                         <div className="max-w-4xl mx-auto text-center">
                             <div className="mb-8">
                                 <div className="w-24 h-24 md:w-32 md:h-32 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full mx-auto mb-6 flex items-center justify-center text-2xl md:text-4xl font-bold shadow-2xl">
-                                    SA
+                                    SAA
                                 </div>
                                 <h1 className="text-4xl md:text-6xl lg:text-8xl font-bold mb-4 bg-gradient-to-r from-white via-blue-200 to-purple-200 bg-clip-text text-transparent">
                                     Shaik Adil Ahmed
