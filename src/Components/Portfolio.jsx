@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Mail, Phone, MapPin, Github, ExternalLink, Code, Database, Server, Palette, Star, Calendar, Award, User, Briefcase, GraduationCap, FolderOpen } from 'lucide-react';
+import { Mail, Phone, MapPin, Github, ExternalLink, Code, Database, Server, Palette, Star, Calendar, Award, User, Briefcase, GraduationCap, FolderOpen, Menu, X } from 'lucide-react';
 
 const Portfolio = () => {
     const [activeSection, setActiveSection] = useState('hero');
     const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
     const [isLoaded, setIsLoaded] = useState(false);
+    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
     useEffect(() => {
         setIsLoaded(true);
@@ -65,13 +66,24 @@ const Portfolio = () => {
         }
     ];
 
-    const NavItem = ({ icon: Icon, label, sectionId }) => (
+    const navItems = [
+        { icon: User, label: "About", sectionId: "hero" },
+        { icon: Code, label: "Skills", sectionId: "skills" },
+        { icon: FolderOpen, label: "Projects", sectionId: "projects" },
+        { icon: Briefcase, label: "Experience", sectionId: "experience" },
+        { icon: GraduationCap, label: "Education", sectionId: "education" }
+    ];
+
+    const NavItem = ({ icon: Icon, label, sectionId, mobile = false }) => (
         <button
-            onClick={() => setActiveSection(sectionId)}
+            onClick={() => {
+                setActiveSection(sectionId);
+                if (mobile) setIsMobileMenuOpen(false);
+            }}
             className={`flex items-center space-x-3 px-5 py-3 rounded-2xl transition-all duration-500 ease-out transform ${activeSection === sectionId
                     ? 'bg-white/15 text-white shadow-xl shadow-purple-500/20 scale-105 border border-white/20'
                     : 'text-white/70 hover:text-white hover:bg-white/8 hover:scale-102 border border-transparent hover:border-white/10'
-                }`}
+                } ${mobile ? 'w-full justify-start' : ''}`}
         >
             <Icon size={20} className="transition-transform duration-300" />
             <span className="font-semibold text-sm">{label}</span>
@@ -139,7 +151,7 @@ const Portfolio = () => {
     );
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-violet-900 text-white overflow-hidden relative">
+        <div className="pb-5 min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-violet-900 text-white overflow-hidden relative">
             {/* Animated Background Elements */}
             <div className="absolute inset-0 overflow-hidden">
                 <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl animate-pulse"></div>
@@ -147,77 +159,124 @@ const Portfolio = () => {
                 <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-pink-500/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }}></div>
             </div>
 
-            {/* Mouse Follower */}
+            {/* Mouse Follower - Hidden on mobile */}
             <div
-                className="fixed w-4 h-4 bg-gradient-to-r from-blue-400 to-purple-500 rounded-full pointer-events-none z-50 transition-all duration-200 ease-out opacity-60 blur-sm"
+                className="fixed w-4 h-4 bg-gradient-to-r from-blue-400 to-purple-500 rounded-full pointer-events-none z-50 transition-all duration-200 ease-out opacity-60 blur-sm hidden md:block"
                 style={{
                     left: mousePosition.x - 8,
                     top: mousePosition.y - 8,
                 }}
             ></div>
             <div
-                className="fixed w-2 h-2 bg-white rounded-full pointer-events-none z-50 transition-all duration-100 ease-out"
+                className="fixed w-2 h-2 bg-white rounded-full pointer-events-none z-50 transition-all duration-100 ease-out hidden md:block"
                 style={{
                     left: mousePosition.x - 4,
                     top: mousePosition.y - 4,
                 }}
             ></div>
 
-            {/* Navigation */}
-            <nav className="fixed top-6 left-1/2 transform -translate-x-1/2 z-40 bg-black/30 backdrop-blur-xl rounded-3xl p-3 border border-white/15 shadow-2xl shadow-purple-500/10">
+            {/* Desktop Navigation */}
+            <nav className="fixed top-6 left-1/2 transform -translate-x-1/2 z-40 bg-black/30 backdrop-blur-xl rounded-3xl p-3 border border-white/15 shadow-2xl shadow-purple-500/10 hidden lg:block">
                 <div className="flex space-x-2">
-                    <NavItem icon={User} label="About" sectionId="hero" />
-                    <NavItem icon={Code} label="Skills" sectionId="skills" />
-                    <NavItem icon={FolderOpen} label="Projects" sectionId="projects" />
-                    <NavItem icon={Briefcase} label="Experience" sectionId="experience" />
-                    <NavItem icon={GraduationCap} label="Education" sectionId="education" />
+                    {navItems.map((item) => (
+                        <NavItem key={item.sectionId} {...item} />
+                    ))}
                 </div>
             </nav>
 
+            {/* Mobile Navigation Toggle */}
+            <button
+                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                className="fixed top-6 right-6 z-50 lg:hidden bg-black/30 backdrop-blur-xl rounded-2xl p-3 border border-white/15 shadow-2xl shadow-purple-500/10 hover:bg-black/40 transition-all duration-300"
+            >
+                {isMobileMenuOpen ? (
+                    <X size={24} className="text-white" />
+                ) : (
+                    <Menu size={24} className="text-white" />
+                )}
+            </button>
+
+            {/* Mobile Navigation Menu */}
+            <div className={`fixed inset-0 z-40 lg:hidden transition-all duration-500 ${isMobileMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}>
+                <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setIsMobileMenuOpen(false)}></div>
+                <div className={`absolute top-0 right-0 h-full w-80 max-w-[80vw] bg-gray-900/95 backdrop-blur-xl border-l border-white/10 transform transition-transform duration-500 ${isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}>
+                    <div className="p-6 pt-20">
+                        <div className="space-y-3">
+                            {navItems.map((item) => (
+                                <NavItem key={item.sectionId} {...item} mobile={true} />
+                            ))}
+                        </div>
+                        
+                        {/* Mobile Contact Info */}
+                        <div className="mt-8 pt-8 border-t border-white/10 space-y-4">
+                            <h3 className="text-white font-semibold mb-4">Contact</h3>
+                            <a
+                                href="mailto:sadilahmed0786@gmail.com"
+                                className="flex items-center space-x-3 text-white/70 hover:text-white transition-colors duration-300"
+                            >
+                                <Mail size={18} />
+                                <span className="text-sm">Email</span>
+                            </a>
+                            <a
+                                href="tel:+919059628529"
+                                className="flex items-center space-x-3 text-white/70 hover:text-white transition-colors duration-300"
+                            >
+                                <Phone size={18} />
+                                <span className="text-sm">Phone</span>
+                            </a>
+                            <div className="flex items-center space-x-3 text-white/70">
+                                <MapPin size={18} />
+                                <span className="text-sm">Kurnool, AP</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             {/* Main Content */}
-            <div className="relative z-10 pt-20">
+            <div className="relative z-10 pt-20 md:mt-5 lg:pt-20">
                 {/* Hero Section */}
                 {activeSection === 'hero' && (
                     <section className={`min-h-screen flex items-center justify-center px-6 ${isLoaded ? 'animate-fade-in' : 'opacity-0'}`}>
                         <div className="max-w-4xl mx-auto text-center">
                             <div className="mb-8">
-                                <div className="w-32 h-32 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full mx-auto mb-6 flex items-center justify-center text-4xl font-bold shadow-2xl">
+                                <div className="w-24 h-24 md:w-32 md:h-32 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full mx-auto mb-6 flex items-center justify-center text-2xl md:text-4xl font-bold shadow-2xl">
                                     SA
                                 </div>
-                                <h1 className="text-6xl md:text-8xl font-bold mb-4 bg-gradient-to-r from-white via-blue-200 to-purple-200 bg-clip-text text-transparent">
+                                <h1 className="text-4xl md:text-6xl lg:text-8xl font-bold mb-4 bg-gradient-to-r from-white via-blue-200 to-purple-200 bg-clip-text text-transparent">
                                     Shaik Adil Ahmed
                                 </h1>
-                                <p className="text-2xl md:text-3xl text-white/80 mb-6">MERN Stack Developer</p>
-                                <p className="text-lg text-white/60 max-w-2xl mx-auto leading-relaxed">
+                                <p className="text-xl md:text-2xl lg:text-3xl text-white/80 mb-6">MERN Stack Developer</p>
+                                <p className="text-base md:text-lg text-white/60 max-w-2xl mx-auto leading-relaxed">
                                     Crafting secure, scalable, and high-performance web applications with 2+ years of expertise in the MERN stack ecosystem.
                                 </p>
                             </div>
 
-                            <div className="flex flex-wrap justify-center gap-6 mb-12">
+                            <div className="flex flex-col sm:flex-row flex-wrap justify-center gap-4 md:gap-6 mb-12">
                                 <a
                                     href="mailto:sadilahmed0786@gmail.com"
-                                    className="flex items-center space-x-3 bg-white/8 backdrop-blur-xl rounded-2xl px-6 py-4 border border-white/20 hover:bg-white/15 hover:border-white/30 hover:scale-105 transition-all duration-500 group"
+                                    className="flex items-center justify-center space-x-3 bg-white/8 backdrop-blur-xl rounded-2xl px-4 md:px-6 py-3 md:py-4 border border-white/20 hover:bg-white/15 hover:border-white/30 hover:scale-105 transition-all duration-500 group"
                                 >
-                                    <Mail size={22} className="group-hover:scale-110 transition-transform duration-300" />
-                                    <span className="font-medium">sadilahmed0786@gmail.com</span>
+                                    <Mail size={20} className="group-hover:scale-110 transition-transform duration-300" />
+                                    <span className="font-medium text-sm md:text-base">sadilahmed0786@gmail.com</span>
                                 </a>
                                 <a
                                     href="tel:+919059628529"
-                                    className="flex items-center space-x-3 bg-white/8 backdrop-blur-xl rounded-2xl px-6 py-4 border border-white/20 hover:bg-white/15 hover:border-white/30 hover:scale-105 transition-all duration-500 group"
+                                    className="flex items-center justify-center space-x-3 bg-white/8 backdrop-blur-xl rounded-2xl px-4 md:px-6 py-3 md:py-4 border border-white/20 hover:bg-white/15 hover:border-white/30 hover:scale-105 transition-all duration-500 group"
                                 >
-                                    <Phone size={22} className="group-hover:scale-110 transition-transform duration-300" />
-                                    <span className="font-medium">+91 9059628529</span>
+                                    <Phone size={20} className="group-hover:scale-110 transition-transform duration-300" />
+                                    <span className="font-medium text-sm md:text-base">+91 9059628529</span>
                                 </a>
-                                <div className="flex items-center space-x-3 bg-white/8 backdrop-blur-xl rounded-2xl px-6 py-4 border border-white/20">
-                                    <MapPin size={22} />
-                                    <span className="font-medium">Kurnool, Andhra Pradesh</span>
+                                <div className="flex items-center justify-center space-x-3 bg-white/8 backdrop-blur-xl rounded-2xl px-4 md:px-6 py-3 md:py-4 border border-white/20">
+                                    <MapPin size={20} />
+                                    <span className="font-medium text-sm md:text-base">Kurnool, Andhra Pradesh</span>
                                 </div>
                             </div>
 
-                            <div className="flex justify-center space-x-6">
-                                <span className="px-6 py-3 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-2xl text-sm font-semibold hover:scale-105 transition-transform duration-300">Problem Solving</span>
-                                <span className="px-6 py-3 bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500 rounded-2xl text-sm font-semibold hover:scale-105 transition-transform duration-300">Analytical Thinking</span>
-                                <span className="px-6 py-3 bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 rounded-2xl text-sm font-semibold hover:scale-105 transition-transform duration-300">Time Management</span>
+                            <div className="flex flex-col sm:flex-row justify-center items-center gap-3 md:gap-6">
+                                <span className="px-4 md:px-6 py-2 md:py-3 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-2xl text-xs md:text-sm font-semibold hover:scale-105 transition-transform duration-300">Problem Solving</span>
+                                <span className="px-4 md:px-6 py-2 md:py-3 bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500 rounded-2xl text-xs md:text-sm font-semibold hover:scale-105 transition-transform duration-300">Analytical Thinking</span>
+                                <span className="px-4 md:px-6 py-2 md:py-3 bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 rounded-2xl text-xs md:text-sm font-semibold hover:scale-105 transition-transform duration-300">Time Management</span>
                             </div>
                         </div>
                     </section>
@@ -227,10 +286,10 @@ const Portfolio = () => {
                 {activeSection === 'skills' && (
                     <section className={`min-h-screen py-20 px-6 ${isLoaded ? 'animate-fade-in' : 'opacity-0'}`}>
                         <div className="max-w-6xl mx-auto">
-                            <h2 className="text-4xl md:text-6xl font-bold text-center mb-16 bg-gradient-to-r from-white to-blue-200 bg-clip-text text-transparent">
+                            <h2 className="text-3xl md:text-4xl lg:text-6xl font-bold text-center mb-16 bg-gradient-to-r from-white to-blue-200 bg-clip-text text-transparent">
                                 Technical Skills
                             </h2>
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
                                 <SkillCard
                                     title="Frontend Development"
                                     skills={skills.frontend}
@@ -264,10 +323,10 @@ const Portfolio = () => {
                 {activeSection === 'projects' && (
                     <section className={`min-h-screen py-20 px-6 ${isLoaded ? 'animate-fade-in' : 'opacity-0'}`}>
                         <div className="max-w-6xl mx-auto">
-                            <h2 className="text-4xl md:text-6xl font-bold text-center mb-16 bg-gradient-to-r from-white to-purple-200 bg-clip-text text-transparent">
+                            <h2 className="text-3xl md:text-4xl lg:text-6xl font-bold text-center mb-16 bg-gradient-to-r from-white to-purple-200 bg-clip-text text-transparent">
                                 Featured Projects
                             </h2>
-                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
                                 {projects.map((project, index) => (
                                     <ProjectCard key={index} project={project} index={index} />
                                 ))}
@@ -280,17 +339,17 @@ const Portfolio = () => {
                 {activeSection === 'experience' && (
                     <section className={`min-h-screen py-20 px-6 ${isLoaded ? 'animate-fade-in' : 'opacity-0'}`}>
                         <div className="max-w-4xl mx-auto">
-                            <h2 className="text-4xl md:text-6xl font-bold text-center mb-16 bg-gradient-to-r from-white to-green-200 bg-clip-text text-transparent">
+                            <h2 className="text-3xl md:text-4xl lg:text-6xl font-bold text-center mb-16 bg-gradient-to-r from-white to-green-200 bg-clip-text text-transparent">
                                 Professional Experience
                             </h2>
-                            <div className="bg-white/5 backdrop-blur-md rounded-3xl p-8 border border-white/10">
-                                <div className="flex items-center space-x-4 mb-6">
-                                    <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center">
-                                        <Briefcase size={24} className="text-white" />
+                            <div className="bg-white/5 backdrop-blur-md rounded-3xl p-6 md:p-8 border border-white/10">
+                                <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-4 sm:space-y-0 sm:space-x-4 mb-6">
+                                    <div className="w-12 h-12 md:w-16 md:h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center flex-shrink-0">
+                                        <Briefcase size={20} className="text-white" />
                                     </div>
                                     <div>
-                                        <h3 className="text-2xl font-bold text-white">MERN Stack Developer</h3>
-                                        <p className="text-white/70">Microtechster IT Solutions</p>
+                                        <h3 className="text-xl md:text-2xl font-bold text-white">MERN Stack Developer</h3>
+                                        <p className="text-white/70">SANVAN Software Limited</p>
                                         <p className="text-white/50 text-sm flex items-center">
                                             <Calendar size={16} className="mr-2" />
                                             Jan 2023 - Present
@@ -321,10 +380,10 @@ const Portfolio = () => {
                 {activeSection === 'education' && (
                     <section className={`min-h-screen py-20 px-6 ${isLoaded ? 'animate-fade-in' : 'opacity-0'}`}>
                         <div className="max-w-4xl mx-auto">
-                            <h2 className="text-4xl md:text-6xl font-bold text-center mb-16 bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text">
+                            <h2 className="text-3xl md:text-4xl lg:text-6xl font-bold text-center mb-16 bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
                                 Education
                             </h2>
-                            <div className="space-y-8">
+                            <div className="space-y-6 md:space-y-8">
                                 {[
                                     {
                                         degree: "Bachelor of Technology",
@@ -349,20 +408,20 @@ const Portfolio = () => {
                                     }
                                 ].map((edu, index) => (
                                     <div key={index} className={`bg-gradient-to-r ${edu.color} rounded-2xl p-1 shadow-lg hover:shadow-xl transition-shadow`}>
-                                        <div className="bg-gray-900/90 backdrop-blur-md rounded-2xl p-6 hover:bg-gray-900 transition-colors">
-                                            <div className="flex flex-col md:flex-row items-center justify-between mb-4 gap-4">
+                                        <div className="bg-gray-900/90 backdrop-blur-md rounded-2xl p-4 md:p-6 hover:bg-gray-900 transition-colors">
+                                            <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-4 gap-4">
                                                 <div className="flex items-center space-x-4">
-                                                    <div className={`w-12 h-12 bg-gradient-to-br ${edu.color} rounded-xl flex items-center justify-center shadow-md`}>
-                                                        <GraduationCap size={20} className="text-white" />
+                                                    <div className={`w-10 h-10 md:w-12 md:h-12 bg-gradient-to-br ${edu.color} rounded-xl flex items-center justify-center shadow-md flex-shrink-0`}>
+                                                        <GraduationCap size={18} className="text-white" />
                                                     </div>
                                                     <div>
-                                                        <h3 className="text-xl font-bold text-white">{edu.degree}</h3>
-                                                        <p className="text-gray-300">{edu.institution}</p>
+                                                        <h3 className="text-lg md:text-xl font-bold text-white">{edu.degree}</h3>
+                                                        <p className="text-gray-300 text-sm md:text-base">{edu.institution}</p>
                                                     </div>
                                                 </div>
-                                                <div className="text-center md:text-right">
-                                                    <p className="text-white font-semibold text-lg">{edu.score}</p>
-                                                    <p className="text-gray-400 text-sm">{edu.period}</p>
+                                                <div className="text-left md:text-right ml-14 md:ml-0">
+                                                    <p className="text-white font-semibold text-base md:text-lg">{edu.score}</p>
+                                                    <p className="text-gray-400 text-xs md:text-sm">{edu.period}</p>
                                                 </div>
                                             </div>
                                         </div>
@@ -370,15 +429,15 @@ const Portfolio = () => {
                                 ))}
                             </div>
 
-                            <div className="mt-16 text-center">
-                                <h3 className="text-2xl font-bold text-white mb-6 bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
+                            <div className="mt-12 md:mt-16 text-center">
+                                <h3 className="text-xl md:text-2xl font-bold text-white mb-6 bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
                                     Languages
                                 </h3>
                                 <div className="flex justify-center flex-wrap gap-3">
                                     {['English', 'Hindi', 'Urdu', 'Telugu'].map((lang, index) => (
                                         <span
                                             key={index}
-                                            className="px-6 py-3 bg-gray-800 hover:bg-gray-700 backdrop-blur-md rounded-full border border-gray-700 text-gray-100 hover:text-white transition-colors shadow-sm"
+                                            className="px-4 md:px-6 py-2 md:py-3 bg-gray-800 hover:bg-gray-700 backdrop-blur-md rounded-full border border-gray-700 text-gray-100 hover:text-white transition-colors shadow-sm text-sm md:text-base"
                                         >
                                             {lang}
                                         </span>
