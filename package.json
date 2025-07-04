@@ -2,7 +2,7 @@
   "name": "portfolio",
   "homepage": "https://jamshed-adil.github.io/adil-portfolio",
   "description": "A personal portfolio website built with React and Tailwind CSS",
-  "author": "Your Name <your.email@example.com>",
+  "author": "Adil Ahmed <sadilahmed0786@gmail.com>",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
